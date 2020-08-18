@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ObjectPooler : Singleton<ObjectPooler>
 {
+    public ObjectPooler()
+	{
+        destroyOnLoad = true;
+	}
+
     [SerializeField] private int minObjectsCountToCreateNew;
     [SerializeField] private List<Pool> PoolsList = new List<Pool>();
 	private Transform ObjectPoolParent;

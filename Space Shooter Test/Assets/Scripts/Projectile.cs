@@ -51,6 +51,7 @@ public class Projectile : MonoBehaviour, ITick, IAwake
 			if (enemies[i].TryGetComponent(out IEnemy enemy))
 			{
 				enemy.Kill();
+				ObjectPooler.Instance.Despawn(gameObject);
 			}
 		}
 	}

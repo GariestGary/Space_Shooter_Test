@@ -303,7 +303,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85d639665514c5b489d33b077a3ef018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intervalInMilliseconds: 1000
+  intervalInMilliseconds: 250
   enemyPoolTag: Asteroids
 --- !u!4 &900916014
 Transform:
@@ -378,7 +378,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1112411981
+--- !u!1 &952749219
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -386,59 +386,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1112411982}
-  - component: {fileID: 1112411983}
-  m_Layer: 5
-  m_Name: Health
+  - component: {fileID: 952749221}
+  - component: {fileID: 952749220}
+  m_Layer: 0
+  m_Name: Object Pooler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1112411982
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112411981}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1655994109}
-  m_Father: {fileID: 1296420993}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1112411983
+--- !u!114 &952749220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112411981}
+  m_GameObject: {fileID: 952749219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 7626a36c244a5994b93069bfb3fa31b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 25
-    m_Right: 0
-    m_Top: 25
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 500, y: 200}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  minObjectsCountToCreateNew: 5
+  PoolsList:
+  - tag: Asteroids
+    pooledObject: {fileID: 5741694342213906103, guid: 053b8e78345340c4381a333f494529f7,
+      type: 3}
+    size: 50
+  - tag: Projectiles
+    pooledObject: {fileID: 2216451856586399644, guid: d7e027424464c0b4ab8cb20810f481f4,
+      type: 3}
+    size: 50
+--- !u!4 &952749221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952749219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.7193081, y: -0.70948017, z: -29.44336}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1196537641
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +441,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1196537642}
   - component: {fileID: 1196537643}
-  - component: {fileID: 1196537644}
   m_Layer: 0
   m_Name: '[ENTRY]'
   m_TagString: Untagged
@@ -489,28 +480,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4afd7329eb3cc6147992d7a2639e3dd8, type: 2}
   - {fileID: 11400000, guid: 4a35d045318acb04aa7485a97759c625, type: 2}
   targetFrameRate: -1
---- !u!114 &1196537644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196537641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7626a36c244a5994b93069bfb3fa31b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minObjectsCountToCreateNew: 5
-  PoolsList:
-  - tag: Asteroids
-    pooledObject: {fileID: 5741694342213906103, guid: 053b8e78345340c4381a333f494529f7,
-      type: 3}
-    size: 50
-  - tag: Projectiles
-    pooledObject: {fileID: 2216451856586399644, guid: d7e027424464c0b4ab8cb20810f481f4,
-      type: 3}
-    size: 50
 --- !u!1 &1296420989
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +492,7 @@ GameObject:
   - component: {fileID: 1296420992}
   - component: {fileID: 1296420991}
   - component: {fileID: 1296420990}
+  - component: {fileID: 1296420994}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -601,7 +571,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1112411982}
+  - {fileID: 1655994109}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -610,6 +580,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1296420994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296420989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d6ebb3059546043b558cbc6516f75a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PauseUI: {fileID: 0}
+  WinUI: {fileID: 0}
+  LooseUI: {fileID: 0}
 --- !u!1 &1431376851
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,8 +636,9 @@ GameObject:
   - component: {fileID: 1655994109}
   - component: {fileID: 1655994111}
   - component: {fileID: 1655994110}
+  - component: {fileID: 1655994112}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -665,18 +651,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655994108}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1112411982}
+  m_Father: {fileID: 1296420993}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 25, y: -25}
+  m_SizeDelta: {x: 250, y: 75}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1655994110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,19 +676,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.990566, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 72
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 95
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -717,6 +703,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655994108}
   m_CullTransparentMesh: 1
+--- !u!114 &1655994112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655994108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 1.5, y: -1.5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1741035299
 GameObject:
   m_ObjectHideFlags: 0

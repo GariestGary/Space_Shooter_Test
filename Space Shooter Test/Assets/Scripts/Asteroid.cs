@@ -15,11 +15,16 @@ public class Asteroid : MonoBehaviour, IEnemy, IPooledObject, ITick, IAwake
 	private Transform t;
 	private float currentSpeed;
 	private Camera camera;
+	private bool killed = false;
 
 	public bool Process => gameObject.activeSelf;
 
 	public void Kill()
 	{
+		if (killed) return;
+
+		killed = true;
+		Toolbox.GetManager<MessageManager>().Send(ServiceShareData.ASTEROID_DESTROYED);
 		ObjectPooler.Instance.Despawn(gameObject, 0);
 	}
 
@@ -33,6 +38,7 @@ public class Asteroid : MonoBehaviour, IEnemy, IPooledObject, ITick, IAwake
 
 	public void OnSpawn(object data)
 	{
+		killed = false;
 		float scale = UnityEngine.Random.Range(minSize, maxSize);
 		t.localScale = new Vector3(scale, scale, 1);
 

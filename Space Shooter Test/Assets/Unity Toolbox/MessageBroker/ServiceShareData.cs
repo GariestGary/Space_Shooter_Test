@@ -8,5 +8,6 @@ public enum ServiceShareData
     SHIP_HIT,
     UI_DECREASE_HEALTH,
     LOOSE,
-    WIN
+    WIN,
+    ASTEROID_DESTROYED
 }
