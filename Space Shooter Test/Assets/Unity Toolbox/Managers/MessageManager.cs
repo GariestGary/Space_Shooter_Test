@@ -9,10 +9,11 @@ using System.Runtime.InteropServices.ComTypes;
 public class MessageManager : ManagerBase, IExecute
 {
     private CompositeDisposable subscriptions = new CompositeDisposable();
+    private MessageBroker broker;
 
     public void Subscribe(ServiceShareData id, Action next, object sender = null, string tag = "")
     {
-        var sub = MessageBroker.Default.Receive<MessageBase>().Where(
+        var sub = broker.Receive<MessageBase>().Where(
             ctx =>
             (ctx.id == id) &&
             (ctx.sender == null || ctx.sender == sender) &&
@@ -22,7 +23,7 @@ public class MessageManager : ManagerBase, IExecute
 
     public void Send(ServiceShareData id, object sender = null, string tag = "")
     {
-        MessageBroker.Default.Publish(MessageBase.Create(sender, id, tag));
+        broker.Publish(MessageBase.Create(sender, id, tag));
     }
 
     private void ClearDisposables()
@@ -32,6 +33,7 @@ public class MessageManager : ManagerBase, IExecute
 
 	public void OnExecute()
 	{
+        broker = new MessageBroker();
         Subscribe(ServiceShareData.SCENE_CHANGE, ClearDisposables);
     }
 }

@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66eb79e714a8cf4692cac9f3af2cc28, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
+  winSound: {fileID: 8300000, guid: c2ddbde9620250d4fb65b835f773e547, type: 3}
+  looseSound: {fileID: 8300000, guid: 2f6061fd3af7e884b9751753206a60db, type: 3}

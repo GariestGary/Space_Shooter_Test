@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "Input", menuName = "Toolbox/Managers/Input Manager")]
-public class InputManager : ManagerBase, IExecute
+public class InputManager : ManagerBase, IExecute, ISceneChange
 {
+	[SerializeField] private bool externalInput;
 	//Create input actions assets named "Controls"
 	private Controls controls;
 
@@ -17,9 +18,18 @@ public class InputManager : ManagerBase, IExecute
 
 	public event Action OnClick;
 
+	public bool Clicked { get; private set; } = false;
+
 	public Controls GetBindings()
 	{
 		return controls;
+	}
+
+	public void SetInput(Vector2 input)
+	{
+		if (!externalInput) return;
+
+		MoveInput = input;
 	}
 
 	private void OnEnable()
@@ -39,11 +49,26 @@ public class InputManager : ManagerBase, IExecute
 
 	private void InitializeControls()
 	{
+		controls = new Controls();
+
 		controls.Player.PointerPosition.performed += ctx => PointerPosition = ctx.ReadValue<Vector2>();
 		controls.Player.PointerDelta.performed += ctx => PointerDelta = ctx.ReadValue<Vector2>();
 
-		controls.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
-		controls.Player.Click.performed += _ => OnClick.Invoke();
+		controls.Player.Movement.performed += ctx => 
+		{
+			if (externalInput) return;
+			MoveInput = ctx.ReadValue<Vector2>();
+		};
+		controls.Player.Click.performed += _ => 
+		{
+			Clicked = true;
+			OnClick.Invoke();
+		};
+
+		controls.Player.Click.canceled += _ =>
+		{
+			Clicked = false;
+		};
 
 		controls.Enable();
 	}
@@ -51,8 +76,12 @@ public class InputManager : ManagerBase, IExecute
 	public void OnExecute()
 	{
 		controls?.Dispose();
-		controls = new Controls();
 
 		InitializeControls();
+	}
+
+	public void OnSceneChange()
+	{
+		controls?.Dispose();
 	}
 }

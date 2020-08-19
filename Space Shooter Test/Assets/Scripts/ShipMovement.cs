@@ -39,7 +39,7 @@ public class ShipMovement : MonoBehaviour, IAwake, ITick
 
 	private void Move()
 	{
-		if (!isControlled) return;
+		if (!isControlled || !input) return;
 
 		Vector3 direction = new Vector3(input.MoveInput.x, input.MoveInput.y, 0) * movementSpeed * Time.deltaTime;
 		t.position += direction;

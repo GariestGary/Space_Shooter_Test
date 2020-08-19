@@ -13,9 +13,11 @@ public class LevelLoader: Singleton<LevelLoader>
 		destroyOnLoad = false;
 	}
 
-	[SerializeField] private GameObject openedlLevelPrefabUI;
-	[SerializeField] private GameObject lockedlLevelPrefabUI;
-	[SerializeField] private GameObject finishedlLevelPrefabUI;
+	[SerializeField] private bool loadLevelsFromPlayerPrefs;
+
+	[SerializeField] private GameObject openedLevelPrefabUI;
+	[SerializeField] private GameObject lockedLevelPrefabUI;
+	[SerializeField] private GameObject finishedLevelPrefabUI;
 
 	[SerializeField] private List<DefaultObjective> levels = new List<DefaultObjective>();
 
@@ -27,17 +29,22 @@ public class LevelLoader: Singleton<LevelLoader>
 			GameObject level;
 			int num = i;
 
+			if (loadLevelsFromPlayerPrefs && PlayerPrefs.HasKey(i + " level"))
+			{
+				levels[i].SetState((ObjectiveState)PlayerPrefs.GetInt(i + " level")); //Load state from playerprefs
+			}
+
 			switch (levels[i].State)
 			{
 				case ObjectiveState.Opened: 
-					level = Instantiate(openedlLevelPrefabUI);
+					level = Instantiate(openedLevelPrefabUI);
 					level.GetComponent<Button>().onClick.AddListener(() => { menu.LoadLevel(levels[num]); });
 					break;
 				case ObjectiveState.Locked:
-					level = Instantiate(lockedlLevelPrefabUI);
+					level = Instantiate(lockedLevelPrefabUI);
 					break;
 				case ObjectiveState.Finished:
-					level = Instantiate(finishedlLevelPrefabUI);
+					level = Instantiate(finishedLevelPrefabUI);
 					level.GetComponent<Button>().onClick.AddListener(() => { menu.LoadLevel(levels[num]); });
 					break;
 				default:
@@ -57,6 +64,8 @@ public class LevelLoader: Singleton<LevelLoader>
 
 	public IObjective GetObjective(int index)
 	{
+		if (index >= levels.Count) return null;
+
 		return levels[index];
 	}
 }

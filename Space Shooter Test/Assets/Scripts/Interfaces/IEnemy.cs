@@ -6,5 +6,7 @@ using System.Threading.Tasks;
 
 public interface IEnemy
 {
+	int CurrentHealth { get; }
 	void Kill();
+	void Hit();
 }

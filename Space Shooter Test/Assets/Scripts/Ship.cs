@@ -8,6 +8,8 @@ public class Ship : MonoBehaviour, IAwake, ITick
 	[SerializeField] private LayerMask enemyLayer;
 	[SerializeField] private Vector2 colliderSize;
 
+	public int CurrentHealth => currentHealth;
+
 	private int currentHealth;
 
 	private MessageManager msg => Toolbox.GetManager<MessageManager>();
@@ -29,12 +31,12 @@ public class Ship : MonoBehaviour, IAwake, ITick
 	{
 		currentHealth--;
 
+		msg.Send(ServiceShareData.SHIP_HIT);
+
 		if(currentHealth <= 0)
 		{
 			msg.Send(ServiceShareData.LOOSE);
 		}
-
-		Debug.Log("Hitted");
 	}
 
 	private void CollideCheck()

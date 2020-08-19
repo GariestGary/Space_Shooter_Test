@@ -7,7 +7,21 @@ using UnityEngine;
 
 public class UI: Singleton<UI>, IAwake
 {
-	public GameObject PauseUI;
+	public UI()
+	{
+		destroyOnLoad = true;
+	}
+
+	public void SetPause(bool value) => Toolbox.GetManager<GameManager>().SetPause(value);
+	public void GoToMainMenu() => Toolbox.GetManager<GameManager>().ToMainMenu();
+	public void Restart() => Toolbox.GetManager<GameManager>().RestartLevel();
+	public void NextLevel() => Toolbox.GetManager<GameManager>().NextLevel();
+
+	public ProgressBarUI ProgressBar => progressBar;
+
+	[SerializeField] private ProgressBarUI progressBar;
+	[SerializeField] private GameObject PauseUI;
+	[SerializeField] private GameObject GameUI;
 	[SerializeField] private GameObject WinUI;
 	[SerializeField] private GameObject LooseUI;
 
@@ -19,13 +33,23 @@ public class UI: Singleton<UI>, IAwake
 		msg.Subscribe(ServiceShareData.LOOSE, () => OnLoose());
 	}
 
+	public void SetPauseUI(bool value)
+	{
+		PauseUI.SetActive(value);
+	}
+
 	private void OnWin()
 	{
-		Debug.Log("Win");
+		GameUI?.SetActive(false);
+		WinUI?.SetActive(true);
+		LooseUI?.SetActive(false);
 	}
 
 	private void OnLoose()
 	{
-		Debug.Log("Loose");
+		GameUI?.SetActive(false);
+		WinUI?.SetActive(false);
+		LooseUI?.SetActive(true);
 	}
+
 }

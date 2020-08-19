@@ -26,5 +26,19 @@ public class Starter : MonoBehaviour
 		{
 			awake.OnAwake();
 		}
+
+		Toolbox.GetManager<MessageManager>()?.Subscribe(ServiceShareData.SCENE_CHANGE, () => OnSceneChange());
+	}
+
+	private void OnSceneChange()
+	{
+		var allChanges = FindObjectsOfType(typeof(MonoBehaviour)).OfType<ISceneChange>();
+
+		foreach (var change in allChanges)
+		{
+			change.OnSceneChange();
+		}
+
+		Toolbox.ClearAll();
 	}
 }

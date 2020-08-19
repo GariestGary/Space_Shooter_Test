@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour, ITick, IAwake
 
 		float yPos = camera.WorldToViewportPoint(t.position).y;
 
-		if(yPos > 2)
+		if(yPos > 1)
 		{
 			ObjectPooler.Instance.Despawn(gameObject);
 		}
@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour, ITick, IAwake
 		{
 			if (enemies[i].TryGetComponent(out IEnemy enemy))
 			{
-				enemy.Kill();
+				enemy.Hit();
 				ObjectPooler.Instance.Despawn(gameObject);
 			}
 		}

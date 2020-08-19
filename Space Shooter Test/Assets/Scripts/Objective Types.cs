@@ -27,56 +27,20 @@ public class DefaultObjective : ScriptableObject, IObjective
 
 		if (currentState == ObjectiveState.Finished)
 		{
-			LevelLoader.Instance.GetObjective(levelNumber + 1).SetState(ObjectiveState.Opened);
+			LevelLoader.Instance.GetObjective(levelNumber + 1)?.SetState(ObjectiveState.Opened);
 		}
+
+		Save();
 	}
 
 	public void SetNumber(int num)
 	{
 		levelNumber = num;
 	}
-}
 
-[CreateAssetMenu(fileName = "Game/Objectives/Destroy Asteroids")]
-public class DestroyAsteroids : DefaultObjective
-{
-	[SerializeField] private int needToDestroy;
-
-	private int currentCount;
-
-	private MessageManager msg => Toolbox.GetManager<MessageManager>();
-
-	public void CheckOne()
+	public void Save()
 	{
-		currentCount++;
-
-		if (currentCount >= needToDestroy)
-		{
-			msg.Send(ServiceShareData.WIN);
-			SetState(ObjectiveState.Finished);
-		}
-	}
-
-	public override void Initialize()
-	{
-		currentCount = 0;
-
-		msg.Subscribe(ServiceShareData.ASTEROID_DESTROYED, () => CheckOne());
-	}
-}
-
-[CreateAssetMenu(menuName = "Game/Objectives/Live Over Time")]
-public class LiveOverTime: DefaultObjective
-{
-	[SerializeField] private int secondsNeedToLive;
-	private MessageManager msg => Toolbox.GetManager<MessageManager>();
-
-	IDisposable timer;
-
-	public override void Initialize()
-	{
-		timer = Observable.Timer(new TimeSpan(0, 0, secondsNeedToLive)).Subscribe(_ => { msg.Send(ServiceShareData.WIN); SetState(ObjectiveState.Finished); });
-		msg.Subscribe(ServiceShareData.LOOSE, () => timer.Dispose());
+		PlayerPrefs.SetInt(levelNumber.ToString() + " level", (int)State);
 	}
 }
 

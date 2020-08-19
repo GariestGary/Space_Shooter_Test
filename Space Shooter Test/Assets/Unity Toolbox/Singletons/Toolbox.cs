@@ -1,11 +1,18 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using UnityEditor;
 using UnityEngine;
 
 public sealed class Toolbox : Singleton<Toolbox>
 {
+    public Toolbox()
+	{
+        destroyOnLoad = true;
+	}
+
     private Dictionary<Type, object> managers = new Dictionary<Type, object>();
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -60,9 +67,24 @@ public sealed class Toolbox : Singleton<Toolbox>
         disposable.Dispose();
     }
 
-    public void OnQuit()
+    public static void ClearAll()
     {
         Instance.disposables.Dispose();
-	    Instance.managers.Clear();
+
+        foreach (KeyValuePair<Type, object> entry in Instance.managers)
+        {
+            if(entry.Value is ISceneChange)
+			{
+                (entry.Value as ISceneChange).OnSceneChange();
+			}
+        }
+
+        Instance.managers.Clear();
+        DOTween.KillAll();
     }
+
+	private void OnApplicationQuit()
+	{
+        ClearAll();
+	}
 }

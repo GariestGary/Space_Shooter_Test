@@ -9,5 +9,7 @@ public enum ServiceShareData
     UI_DECREASE_HEALTH,
     LOOSE,
     WIN,
-    ASTEROID_DESTROYED
+    ASTEROID_DESTROYED,
+    TO_MAIN_MENU,
+    PLAYER_SET
 }

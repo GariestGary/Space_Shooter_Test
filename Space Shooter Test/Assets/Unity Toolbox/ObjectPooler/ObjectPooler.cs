@@ -13,7 +13,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
     [SerializeField] private List<Pool> PoolsList = new List<Pool>();
 	private Transform ObjectPoolParent;
 
-	public Dictionary<string, Queue<GameObject>> Pools { get; private set; }
+    public Dictionary<string, LinkedList<GameObject>> Pools { get; private set; } = new Dictionary<string, LinkedList<GameObject>>();
 
 	[System.Serializable]
     public class Pool
@@ -25,8 +25,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
 
     public void Awake()
     {
-        Pools = new Dictionary<string, Queue<GameObject>>();
-        
+        Pools = new Dictionary<string, LinkedList<GameObject>>();
 
         ObjectPoolParent = new GameObject().transform;
         ObjectPoolParent.name = "PoolParent";
@@ -44,7 +43,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
             return;
         }
 
-        Queue<GameObject> objectPool = new Queue<GameObject>();
+        LinkedList<GameObject> objectPool = new LinkedList<GameObject>();
 
         for (int j = 0; j < size; j++)
         {
@@ -62,12 +61,13 @@ public class ObjectPooler : Singleton<ObjectPooler>
             return null;
         }
 
-        if (Pools[poolTag].Peek().activeSelf)
+        if (Pools[poolTag].Last.Value.activeSelf)
         {
-            CreateNewPoolObject(Pools[poolTag].Peek(), Pools[poolTag]);
+            CreateNewPoolObject(Pools[poolTag].Last.Value, Pools[poolTag]);
         }
 
-        GameObject obj = Pools[poolTag].Dequeue();
+        GameObject obj = Pools[poolTag].Last.Value;
+        Pools[poolTag].RemoveLast();
 
         if (obj == null)
         {
@@ -79,20 +79,25 @@ public class ObjectPooler : Singleton<ObjectPooler>
         obj.transform.SetParent(parent);
         obj.SetActive(true);
 
-        IPooledObject pooled = obj.GetComponent<IPooledObject>();
+        IPooledObject[] pooled = obj.GetComponents<IPooledObject>();
 
-        if (pooled != null)
-        { 
-            pooled.OnSpawn(data);
-        }
+
+		for (int i = 0; i < pooled.Length; i++)
+		{
+            if (pooled[i] != null)
+            { 
+                pooled[i].OnSpawn(data);
+            }
+		}
        
-        Pools[poolTag].Enqueue(obj);
+        Pools[poolTag].AddFirst(obj);
         return (obj);
     }
 
-    private void CreateNewPoolObject(GameObject obj, Queue<GameObject> pool)
+    private void CreateNewPoolObject(GameObject obj, LinkedList<GameObject> pool)
     {
         GameObject poolObj = Instantiate(obj);
+        poolObj.name = obj.name;
         poolObj.transform.SetParent(ObjectPoolParent);
 
         IAwake[] awakes = poolObj.GetComponents<IAwake>();
@@ -103,7 +108,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
 		}
         
         poolObj.gameObject.SetActive(false);
-        pool.Enqueue(poolObj);
+        pool.AddLast(poolObj);
     }
 
     public IEnumerator DespawnCoroutine(GameObject o, float d = 0)
@@ -120,7 +125,17 @@ public class ObjectPooler : Singleton<ObjectPooler>
             return;
         }
 
-        StartCoroutine(DespawnCoroutine(ObjectToDespawn, delay));
+        if(delay != 0)
+		{
+            StartCoroutine(DespawnCoroutine(ObjectToDespawn, delay));
+        }
+        else
+		{
+            ObjectToDespawn.SetActive(false);
+            ObjectToDespawn.transform.SetParent(ObjectPoolParent);
+        }
+
+        
     }
 
 }
